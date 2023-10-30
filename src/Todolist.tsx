@@ -20,6 +20,12 @@ export function Todolist(props: PropsType) {
 
     const [newTaskTitle, setNewTaskTitle] = useState(' ');
 
+    const addTask = () => {
+        if (newTaskTitle.trim() !== "") {
+            props.addTask(newTaskTitle.trim())
+            setNewTaskTitle("")
+        }
+    }
     const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(e.currentTarget.value)
     }
@@ -28,10 +34,6 @@ export function Todolist(props: PropsType) {
             props.addTask(newTaskTitle)
             setNewTaskTitle('')
         }
-    }
-    const addTask = () => {
-        props.addTask(newTaskTitle)
-        setNewTaskTitle('')
     }
     const onAllClickHandler = () => { props.changeFilter('all')}
     const onActiveClickHandler = () => { props.changeFilter('action')}
