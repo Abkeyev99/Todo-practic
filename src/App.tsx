@@ -38,6 +38,9 @@ function App() {
         let newTasks = [newTask, ...tasks]
         setTasks(newTasks)
     }
+    function changeStatus(taskIa: string) {
+     let task =
+    }
 
     return (
         <div className="App">
