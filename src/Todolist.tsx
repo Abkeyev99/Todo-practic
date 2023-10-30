@@ -1,5 +1,7 @@
 import React, {ChangeEvent, ChangeEventHandler, KeyboardEvent, useState} from 'react';
 import {FilterValurType} from "./App";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 type TaskType = {
     id: string
@@ -19,11 +21,14 @@ type PropsType = {
 export function Todolist(props: PropsType) {
 
     const [newTaskTitle, setNewTaskTitle] = useState(' ');
+    const [error, setError] = useState<string | null>(null);
 
     const addTask = () => {
         if (newTaskTitle.trim() !== "") {
             props.addTask(newTaskTitle.trim())
             setNewTaskTitle("")
+        } else {
+            setError("Title is required")
         }
     }
     const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -44,10 +49,13 @@ export function Todolist(props: PropsType) {
         <div>
             <input
                 value={newTaskTitle}
-                onChange={onNewTitleChangeHandler}/>
+                onChange={onNewTitleChangeHandler}
+                className={error ? "error" : ""}
+            />
             <button onClick={addTask}
                     onKeyUp={onNewPressHandler}
             >+</button>
+            {error && <div className='error-message'>{error}</div>}
         </div>
         <ul>
             {
