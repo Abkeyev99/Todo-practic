@@ -8,14 +8,15 @@ type TaskType = {
 }
 
 type PropsType = {
+    id:string
     title: string
     tasks: Array<TaskType>
-    removeTask: (taskId: string) => void
+    removeTask: (taskId: string, todolistID:string) => void
     changeFilter: (value: FilterValurType,  todolistID: string) => void
-    addTask: (title: string) => void
-    changeTasksStatus: (taskId: string, isDone: boolean) => void
+    addTask: (title: string, todolistID:string) => void
+    changeTasksStatus: (taskId: string, isDone: boolean,  todolistID:string) => void
     filter: FilterValurType
-    id:string
+    removeTodolist: (todolistID:string) => void
 }
 
 export function Todolist(props: PropsType) {
@@ -25,7 +26,7 @@ export function Todolist(props: PropsType) {
 
     const addTask = () => {
         if (newTaskTitle.trim() !== "") {
-            props.addTask(newTaskTitle.trim())
+            props.addTask(newTaskTitle.trim(), props.id)
             setNewTaskTitle("")
         } else {
             setError("Title is required")
@@ -42,10 +43,14 @@ export function Todolist(props: PropsType) {
     }
     const onAllClickHandler = () => { props.changeFilter('all', props.id)}
     const onActiveClickHandler = () => { props.changeFilter('active', props.id)}
-    const onCompletedClickHandler = () => {  props.changeFilter('completed', props.id)}
+    const onCompletedClickHandler = () => { props.changeFilter('completed', props.id)}
+    const removeTodolist = () => {
+        props.removeTodolist(props.id)
+    }
 
     return <div>
-        <h3>{props.title}</h3>
+        <h3>{props.title}
+            <button onClick={removeTodolist}>x</button></h3>
         <div>
             <input
                 value={newTaskTitle}
@@ -61,9 +66,9 @@ export function Todolist(props: PropsType) {
             {
                 props.tasks.map(t =>{
 
-                    const onRemoveHandler = () => {  props.removeTask(t.id)}
+                    const onRemoveHandler = () => {  props.removeTask(t.id, props.id)}
                     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                      props.changeTasksStatus(t.id, e.currentTarget.checked)
+                      props.changeTasksStatus(t.id, e.currentTarget.checked, props.id)
                     }
 
                     return <li key={t.id} className={t.isDone ? "is-done" : ''}>
